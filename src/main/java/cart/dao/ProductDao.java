@@ -13,7 +13,8 @@ import java.util.Optional;
 @Repository
 public class ProductDao {
 
-    private static final RowMapper<ProductEntity> productRowMapper = (resultSet, rowNum) -> new ProductEntity(
+    private static final String PRODUCT_COLUMNS = "id, name, price, image_url";
+    private static final RowMapper<ProductEntity> PRODUCT_ENTITY_ROW_MAPPER = (resultSet, rowNum) -> new ProductEntity(
             resultSet.getInt("id"),
             resultSet.getString("name"),
             resultSet.getInt("price"),
@@ -37,9 +38,9 @@ public class ProductDao {
     }
 
     public Optional<ProductEntity> findById(final long id) {
-        String sql = "select id, name, price, image_url from Product where id = ?";
+        String sql = "select " + PRODUCT_COLUMNS + " from Product where id = ?";
 
-        List<ProductEntity> result = jdbcTemplate.query(sql, productRowMapper, id);
+        List<ProductEntity> result = jdbcTemplate.query(sql, PRODUCT_ENTITY_ROW_MAPPER, id);
 
         if (result.isEmpty()) {
             return Optional.empty();
