@@ -22,4 +22,13 @@ public class ProductController {
 
         return "index";
     }
+
+    @GetMapping("/admin")
+    public String adminPage(final Model model) {
+        List<ProductEntity> products = productDao.findAll();
+
+        model.addAttribute("products", products);
+
+        return "admin";
+    }
 }
