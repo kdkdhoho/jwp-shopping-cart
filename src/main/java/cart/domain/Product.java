@@ -10,6 +10,13 @@ public class Product {
     private final int price;
     private final String imageUrl;
 
+    public Product(final Integer id, final String name, final int price, final String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
     public Product(final String name, final int price, final String imageUrl) {
         id = null;
         this.name = name;
