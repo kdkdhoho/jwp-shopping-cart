@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
+import java.util.List;
 import java.util.Optional;
 
 @JdbcTest
@@ -64,5 +65,12 @@ class ProductDaoTest {
                 () -> assertThat(foundProductEntity.getPrice()).isEqualTo(1000),
                 () -> assertThat(foundProductEntity.getImageUrl()).isEqualTo("상품1 이미지")
         );
+    }
+
+    @Test
+    void 모든_데이터_조회_성공() {
+        List<ProductEntity> result = productDao.findAll();
+
+        assertThat(result.size()).isEqualTo(2);
     }
 }

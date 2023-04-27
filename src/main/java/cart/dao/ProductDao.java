@@ -47,4 +47,10 @@ public class ProductDao {
         }
         return Optional.ofNullable(result.get(0));
     }
+
+    public List<ProductEntity> findAll() {
+        String sql = "select " + PRODUCT_COLUMNS + " from Product";
+
+        return jdbcTemplate.query(sql, PRODUCT_ENTITY_ROW_MAPPER);
+    }
 }
