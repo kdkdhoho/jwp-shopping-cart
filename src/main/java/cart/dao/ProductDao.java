@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public class ProductDao {
 
-    private static final String PRODUCT_COLUMNS = "id, name, price, image_url";
+    private static final String PRODUCT_ALL_COLUMNS = "id, name, price, image_url";
     private static final RowMapper<ProductEntity> PRODUCT_ENTITY_ROW_MAPPER = (resultSet, rowNum) -> new ProductEntity(
             resultSet.getInt("id"),
             resultSet.getString("name"),
@@ -31,14 +31,14 @@ public class ProductDao {
                 .usingGeneratedKeyColumns("id");
     }
 
-    public long insert(final ProductEntity productEntity) {
+    public int insert(final ProductEntity productEntity) {
         SqlParameterSource sqlParameterSource = new BeanPropertySqlParameterSource(productEntity);
 
-        return simpleJdbcInsert.executeAndReturnKey(sqlParameterSource).longValue();
+        return simpleJdbcInsert.executeAndReturnKey(sqlParameterSource).intValue();
     }
 
     public Optional<ProductEntity> findById(final long id) {
-        String sql = "select " + PRODUCT_COLUMNS + " from Product where id = ?";
+        String sql = "select " + PRODUCT_ALL_COLUMNS + " from Product where id = ?";
 
         List<ProductEntity> result = jdbcTemplate.query(sql, PRODUCT_ENTITY_ROW_MAPPER, id);
 
@@ -49,8 +49,25 @@ public class ProductDao {
     }
 
     public List<ProductEntity> findAll() {
-        String sql = "select " + PRODUCT_COLUMNS + " from Product";
+        String sql = "select " + PRODUCT_ALL_COLUMNS + " from Product";
 
         return jdbcTemplate.query(sql, PRODUCT_ENTITY_ROW_MAPPER);
+    }
+
+    public void update(final int id, final ProductEntity productEntity) {
+        String sql = "update Product set name = ?, price = ?, image_url = ? where id = ?";
+
+        jdbcTemplate.update(sql,
+                productEntity.getName(),
+                productEntity.getPrice(),
+                productEntity.getImageUrl(),
+                id
+        );
+    }
+
+    public void delete(final int id) {
+        String sql = "delete from product where id = ?";
+
+        jdbcTemplate.update(sql, id);
     }
 }
